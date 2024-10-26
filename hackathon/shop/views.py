@@ -1,5 +1,7 @@
 from django.shortcuts import render
-
+from shop.models import *
+from django.db.models import Count,Subquery
+from django.core.paginator import Paginator
 from django.db import connection
 
 def get_frequently_bought_together(product_id):
@@ -18,10 +20,29 @@ def get_frequently_bought_together(product_id):
         result = cursor.fetchall()
     return result
 
-def main(request):
+def main(request, page_number=1):
+    print("STARTED")
     
-    return render(request, 'main.html')
+    # Получаем список уникальных product_id из ShopOrderproduct, отсортированных по количеству покупок
+    unique_products = ShopOrderproduct.objects.select_related('product') \
+                      .values('product_id') \
+                      .annotate(purchase_count=Count('product_id')) \
+                      .order_by('-purchase_count')
+    
+    # Используем Subquery, чтобы избежать промежуточного списка, передавая подзапрос напрямую
+    products = ShopProduct.objects.filter(id__in=Subquery(unique_products.values('product_id'))) \
+                .select_related('department') \
+                .order_by('product_name')
+
+    print("TWO QUERY")
+    
+    p = Paginator(products, 25)
+    data = p.get_page(10)
+    # Передаем результат в шаблон
+    return render(request, 'main.html', {
+        "data": data
+    })
+    
 
 def product1(request):
-
     return render(request, 'product1.html')

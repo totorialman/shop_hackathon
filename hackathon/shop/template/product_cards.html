@@ -1,0 +1,21 @@
+<div class="row row-cols-5">
+        {% for product in data %}
+        <div class="col">
+            <div class="card pass-card">
+              <a href="{% url 'product_url' product.id %}" class="stretched-link"></a>
+              <img src="{{product.image}}" alt="Отсутствует картинка продукта" class="card-img-top"/>
+              <div class="card-body">
+                <h5 class="card-title">{{product.product_name}}</h5>
+                <p class="card-text">{{product.departament}}</p>
+                <p class="card-text">{{product.price}} P</p>
+              </div>
+            </div>
+          </div>
+        {% empty %}
+            <div class="card pass-card">
+            <div class="card-body">
+                <h5 class="card-title">Список пуст</h5>
+            </div>
+            </div>
+        {% endfor %}
+</div>
