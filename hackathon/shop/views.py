@@ -6,5 +6,5 @@ def main(request):
     return render(request, 'main.html')
 
 def product1(request):
-    
+
     return render(request, 'product1.html')
