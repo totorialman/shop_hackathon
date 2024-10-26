@@ -5,7 +5,6 @@ class ShopDepartment(models.Model):
     department = models.CharField(max_length=100)
 
     class Meta:
-        managed = False
         db_table = 'shop_department'
 
 
@@ -17,7 +16,6 @@ class ShopOrder(models.Model):
     eval_set = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'shop_order'
 
 
@@ -28,8 +26,7 @@ class ShopOrderproduct(models.Model):
     product = models.ForeignKey('ShopProduct', models.DO_NOTHING)
 
     class Meta:
-        managed = False
-        db_table = 'shop_orderproduct'
+        db_table = 'shop_order_product'
 
 
 class ShopProduct(models.Model):
@@ -40,5 +37,4 @@ class ShopProduct(models.Model):
     price_z = models.IntegerField()
 
     class Meta:
-        managed = False
         db_table = 'shop_product'
