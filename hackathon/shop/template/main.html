@@ -1,12 +1,45 @@
 {% extends 'base.html' %}
 
 {% block title %}
-	Все товары
+    Все товары
 {% endblock %}
 
-
 {% block content %}
+
+<div class="container">
+    <div class="row justify-content-md-center">
+        <form method="get" class="row w-100">
+            <div class="col-3">
+                <input type="text" name="search" class="form-control" placeholder="Поиск" aria-label="search" value="{{ request.GET.search }}">
+            </div>
+            <div class="col-2">
+                <select name="department" class="form-control">
+                    <option value="">Все категории</option>
+                    {% for department in departments %}
+                        <option value="{{ department.id }}" {% if department.id|stringformat:"s" == department_filter %}selected{% endif %}>{{ department.department }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-2">
+                <input type="number" name="min_price" class="form-control" placeholder="Мин. цена" value="{{ min_price }}">
+            </div>
+            <div class="col-2">
+                <input type="number" name="max_price" class="form-control" placeholder="Макс. цена" value="{{ max_price }}">
+            </div>
+            <div class="col-2">
+                <select name="sort_by" class="form-control">
+                    <option value="product_count" {% if sort_by == 'product_count' %}selected{% endif %}>Популярность</option>
+                    <option value="margin" {% if sort_by == 'margin' %}selected{% endif %}>Маржинальность</option>
+                </select>
+            </div>
+            <div class="col-1">
+                <button type="submit" class="btn btn-primary">Применить</button>
+            </div>
+        </form>
+    </div>
+
     {% include 'product_cards.html' with data=data %}
+
     <div class="d-flex justify-content-between mt-4 my-4">
         {% if previous_page_url %}
             <a href="{{ previous_page_url }}" class="btn btn-primary">Предыдущая</a>
@@ -19,4 +52,6 @@
             <button class="btn btn-secondary" disabled>Следующая</button>
         {% endif %}
     </div>
+</div>
+
 {% endblock %}

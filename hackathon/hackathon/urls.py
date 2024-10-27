@@ -17,9 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from shop import views
+from shop.views import calculate_purchase_recommendations
 
 urlpatterns = [
     path('', views.main),
     path('<int:id>/', views.product1, name='product_url'),
     path('admin/', admin.site.urls),
+    path('recommendations/', calculate_purchase_recommendations, name='recommendations'),
 ]

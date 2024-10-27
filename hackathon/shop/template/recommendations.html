@@ -1,0 +1,80 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рекомендации по Закупке</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        table {
+            margin-top: 20px;
+            border: 1px solid #dee2e6;
+        }
+        th, td {
+            text-align: center;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Рекомендации по Закупке</h1>
+        <p><strong>Общая Прибыль:</strong> {{ total_profit|floatformat:2|intcomma }} ₽</p>
+        <p><strong>Бюджет Закупки:</strong> {{ purchase_budget|floatformat:2|intcomma }} ₽</p>
+
+        <h2>Рекомендуемые Товары:</h2>
+        
+        <div class="mb-3">
+            <form method="get">
+                <label for="desired_profit_percentage">Желаемая Прибыль (%) :</label>
+                <input type="number" name="desired_profit_percentage" id="desired_profit_percentage" value="{{ desired_profit_percentage|floatformat:2 }}" step="0.01" min="0" max="1" required>
+                <button type="submit" class="btn btn-primary">Применить</button>
+            </form>
+        </div>
+
+        <div class="mb-3">
+            <form method="get">
+                <label for="sort_by">Сортировать по:</label>
+                <select name="sort_by" id="sort_by" onchange="this.form.submit()">
+                    <option value="purchase_recommendation">Рекомендуемое Количество</option>
+                    <option value="total_quantity">Всего Продано</option>
+                    <option value="margin">Маржинальность</option>
+                    <option value="popularity">Популярность</option>
+                </select>
+            </form>
+        </div>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Название товара</th>
+                    <th>Всего Продано</th>
+                    <th>Маржинальность(₽)</th>
+                    <th>Популярность</th>
+                    <th>На какую сумму закупить(₽)</th>
+                    <th>Количество для Закупки</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rec in recommendations %}
+                <tr>
+                    <td>{{ rec.product_name }}</td>
+                    <td>{{ rec.total_quantity|intcomma }}</td>
+                    <td>{{ rec.margin|floatformat:2|intcomma }}</td>
+                    <td>{{ rec.popularity|floatformat:4 }}</td>
+                    <td>{{ rec.purchase_recommendation|floatformat:2|intcomma }}</td>
+                    <td>{{ rec.needed_quantity|intcomma }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">Рекомендации отсутствуют.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

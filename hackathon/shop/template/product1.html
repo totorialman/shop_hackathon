@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load humanize %}
 {% load static %}
 {% block title %}
 {{ product.product_name }}
@@ -10,7 +11,7 @@
         <img src="{% static product.image %}" class="w-100" alt="...">
     </div>
     <div class="col-md-8 p-4 ps-md-0">
-        <h5 class="mt-0">{{ product.product_name }}</h5> <!-- Убедитесь, что это правильно -->
+        <h5 class="mt-0">{{ product.product_name }}</h5>
         <p>{{ product.description }}</p>
         <table class="table mb-0">
             <thead>
@@ -22,20 +23,56 @@
             <tbody>
                 <tr>
                     <td>Название</td>
-                    <td>{{ product.product_name }}</td> <!-- Проверьте правильность ключа -->
+                    <td>{{ product.product_name }}</td>
                 </tr>
                 <tr>
                     <td>Категория</td>
-                    <td>{{ product.department__department }}</td> <!-- Проверьте правильность ключа -->
+                    <td>{{ product.department__department }}</td>
                 </tr>
                 <tr>
                     <td>Цена</td>
-                    <td>{{ product.price }} ₽</td> <!-- Добавил знак рубля -->
+                    <td>{{ product.price|intcomma }} ₽</td>
+                </tr>
+                <tr>
+                    <td>Количество продаж</td>
+                    <td>{{ total_sales|intcomma }} шт.</td>
+                </tr>
+                <tr>
+                    <td>Доход</td>
+                    <td>{{ total_revenue|intcomma }} ₽</td>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
 <hr>
+
+<!-- График продаж по дням недели -->
+<canvas id="salesChart" width="400" height="200"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('salesChart').getContext('2d');
+    const salesChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ days_of_week|safe }},
+            datasets: [{
+                label: 'Количество продаж',
+                data: {{ sales_counts|safe }},
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
 {% include 'product_cards.html' with data=data %}
 {% endblock %}
