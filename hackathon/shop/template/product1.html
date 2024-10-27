@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}
-{{product.name}}
+{{ product.product_name }}
 {% endblock %}
 
 {% block content %}
 <div class="row g-0 position-relative">
     <div class="col-md-4 mb-md-0 p-md-4">
-        <img src="C:\Users\Legion\Pictures\bus.png" class="w-100" alt="...">
+        <img src="{% static product.image %}" class="w-100" alt="...">
     </div>
     <div class="col-md-8 p-4 ps-md-0">
-        <h5 class="mt-0">{{product.name}}</h5>
-        <p>{{product.description}}</p>
+        <h5 class="mt-0">{{ product.product_name }}</h5> <!-- Убедитесь, что это правильно -->
+        <p>{{ product.description }}</p>
         <table class="table mb-0">
             <thead>
                 <tr>
@@ -20,13 +20,18 @@
                 </tr>
             </thead>
             <tbody>
-                {% for property in product %}
                 <tr>
-                    <td>{{property.name}}</td>
-                    <td>{{property.value}}</td>
+                    <td>Название</td>
+                    <td>{{ product.product_name }}</td> <!-- Проверьте правильность ключа -->
                 </tr>
-                {% empty %}
-                {% endfor %}
+                <tr>
+                    <td>Категория</td>
+                    <td>{{ product.department__department }}</td> <!-- Проверьте правильность ключа -->
+                </tr>
+                <tr>
+                    <td>Цена</td>
+                    <td>{{ product.price }} ₽</td> <!-- Добавил знак рубля -->
+                </tr>
             </tbody>
         </table>
     </div>

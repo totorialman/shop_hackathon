@@ -1,21 +1,73 @@
-<div class="row row-cols-5">
+{% load static %}
+
+<div class="container mt-4">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4">
         {% for product in data %}
         <div class="col">
-            <div class="card pass-card">
-              <a href="{% url 'product_url' product.id %}" class="stretched-link"></a>
-              <img src="{{product.image}}" alt="Отсутствует картинка продукта" class="card-img-top"/>
-              <div class="card-body">
-                <h5 class="card-title">{{product.product_name}}</h5>
-                <p class="card-text">{{product.departament}}</p>
-                <p class="card-text">{{product.price}} P</p>
-              </div>
+            <div class="card h-100 shadow border-0">
+                <a href="{% url 'product_url' product.product_id %}" class="stretched-link"></a>
+                <img src="{% static product.image %}" alt="Отсутствует картинка продукта" class="card-img-top img-fluid"/>
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title text-primary">{{ product.product__product_name }}</h5>
+                    <div class="mt-auto text-end">
+                        <p class="card-text text-success">{{ product.product__price }} ₽</p>
+                    </div>
+                </div>
             </div>
-          </div>
+        </div>
         {% empty %}
-            <div class="card pass-card">
-            <div class="card-body">
-                <h5 class="card-title">Список пуст</h5>
+        <div class="col">
+            <div class="card h-100 text-center border-light">
+                <div class="card-body">
+                    <h5 class="card-title text-danger">Список пуст</h5>
+                    <p class="card-text">Нет доступных продуктов для отображения.</p>
+                </div>
             </div>
-            </div>
+        </div>
         {% endfor %}
+    </div>
+
+    <!-- Кнопки навигации -->
+    
 </div>
+
+<style>
+    .pass-card {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .pass-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        border-color: #007bff; /* Цвет рамки при наведении */
+    }
+
+    .card-title {
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+    
+    .card-text {
+        font-size: 1rem;
+    }
+
+    body {
+        background-color: #f8f9fa; /* Светлый фон для всего сайта */
+    }
+
+    .container {
+        margin-top: 20px;
+    }
+
+    .text-primary {
+        color: #007bff !important; /* Цвет заголовка */
+    }
+
+    .text-success {
+        color: #28a745 !important; /* Цвет цены */
+    }
+
+    .text-danger {
+        color: #dc3545 !important; /* Цвет текста для пустого списка */
+    }
+</style>
